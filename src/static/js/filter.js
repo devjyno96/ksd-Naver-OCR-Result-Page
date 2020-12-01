@@ -69,7 +69,16 @@ var templateToFunction = {
 
 
 function ocrFilter(response){
-    return templateToFunction[Number(response.images[0].matchedTemplate.id)](response);
+    var result = templateToFunction[Number(response.images[0].matchedTemplate.id)](response);
+    
+    if (result == null){
+        var resultStr = "<h1>" + response.images[0].matchedTemplate.id + " Result table is not ready.</h1>"
+        return new DOMParser().parseFromString(resultStr, "text/html").body;
+    }
+    else{     
+        var doc = new DOMParser().parseFromString(result, "text/html");
+        return doc.body;
+    }
 }
 
 
@@ -95,10 +104,7 @@ function template5127(response){
                 <th>적응행동</th><th>" + result[16].inferText +"</th><th>" + result[17].inferText +"</th><th>" + result[18].inferText + "</th><th>" + result[19].inferText + "</th>\
             </tr>\
         </table>";
-    var doc = new DOMParser().parseFromString(resultStr, "text/html");
-    
-    alert("filter 5127 proccess complete");
-    return doc.body;
+    return resultStr
 
 }
 
