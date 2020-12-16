@@ -112,7 +112,7 @@ function template5126(result) {
     var resultStr = `<table style='border : 1px solid #444444'>\
     <tr>\
         <th></th>\
-        <th>TrTrials to Complete Categoryial</th><th>Total Error</th><th>Perseverative Response</th>\
+        <th>Trials to Complete Categoryial</th><th>Total Error</th><th>Perseverative Response</th>\
         <th>Perseverative Error</th><th>Non-Perseverative Error</th><th>Maintain Set Failure</th>\
     </tr>\
     <tr>\
