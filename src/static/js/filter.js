@@ -69,7 +69,7 @@ var templateToFunction = {
 
 
 function ocrFilter(response){
-    var result = templateToFunction[Number(response.images[0].matchedTemplate.id)](response);
+    var result = templateToFunction[Number(response.images[0].matchedTemplate.id)](response.images[0].fields);
     
     if (result == null){
         var resultStr = "<h1>" + response.images[0].matchedTemplate.id + " Result table is not ready.</h1>"
@@ -82,8 +82,7 @@ function ocrFilter(response){
 }
 
 
-function template5127(response){
-    var result = response.images[0].fields;
+function template5127(result){
     var resultStr = "<table style='border : 1px solid #444444'>\
             <tr style='background-color: skyblue;'>\
                 <th>발달검사</th><th>척도(합산)점수</th><th>발달지수</th><th>백분위</th><th>신뢰구간(95%)</th>\
