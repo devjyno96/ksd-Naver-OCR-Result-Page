@@ -50,6 +50,9 @@ def sttApi():
 
     audio_data = request.data
 
+    f = open("temp.wav", "wb")
+    f.write(audio_data)
+    f.close()
     
     result_str = stt.run("temp.wav")
     result['result'] = result_str
