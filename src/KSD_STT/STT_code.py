@@ -11,8 +11,7 @@ import time
 
 try:
     import azure.cognitiveservices.speech as speechsdk
-except ImportError as e:
-    print(e)
+except ImportError:
     print("""
     Importing the Speech SDK for Python failed.
     Refer to
