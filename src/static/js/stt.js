@@ -32,12 +32,14 @@ function registerListeners() {
 
 function onSTTUpload() {
     var formData = new FormData();
-    formData.append('uploadFile', dom.audioFile.files);
+    formData.append('name', dom.audioFile.files[0].name);
+    formData.append('file', dom.audioFile.files[0]);
 
     $.ajax({
         type: "POST",
         url: "/api/stt",
-        data: dom.audioFile.files[0],
+        //data: dom.audioFile.files[0],
+        data: formData,
         //dataType: 'json',
         processData: false,
         contentType: false,

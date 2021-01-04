@@ -47,10 +47,11 @@ def newOCRRequest():
 @app.route('/api/stt', methods=['POST'])
 def sttApi():
     result = {'result' : "test_val"}
-
+    print(request.data)
+    #print(request.data.uploadFile)
     audio_data = request.data
 
-    f = open("temp.wav", "wb")
+    f = open("temp.wav", "wb+")
     f.write(audio_data)
     f.close()
     
