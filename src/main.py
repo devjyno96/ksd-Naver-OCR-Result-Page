@@ -66,6 +66,8 @@ def sttApi():
 
     result_str = stt.run(bool_mic = False, file_name = UPLOAD_FOLDER + "/" + file.filename)
 
+    os.remove(UPLOAD_FOLDER + "/" + file.filename)
+
     result = {'result' : "test_val"}
 
     result['result'] = result_str
