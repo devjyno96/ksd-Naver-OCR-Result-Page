@@ -41,9 +41,11 @@
     <div class="col-xs-6" id="left" style="height :500px; border-right: 10px solid black; ">
         <div id="left_inner">
             <h1 style="text-align: center;">음성 선택</h1>
-            <div id="audioInputButton" >
-                <input type="file" accept="audio/*" id="audioFile">
-            </div>
+            <form id="upload-file" method="post" enctype="multipart/form-data">
+                <div id="audioInputButton" >
+                    <input type="file" accept="audio/*" id="audioFile">
+                </div>
+            </form>
             <br>
             <br>
             <div id="audioSubmit">

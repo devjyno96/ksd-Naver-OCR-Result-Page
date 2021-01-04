@@ -32,18 +32,18 @@ function registerListeners() {
 
 function onSTTUpload() {
     var formData = new FormData();
-    formData.append('name', dom.audioFile.files[0].name);
+    formData.append('title', dom.audioFile.files[0].name);
     formData.append('file', dom.audioFile.files[0]);
 
     $.ajax({
         type: "POST",
         url: "/api/stt",
-        //data: dom.audioFile.files[0],
+        enctype: 'multipart/form-data',
         data: formData,
-        //dataType: 'json',
-        processData: false,
         contentType: false,
-        //contentType: "application/json",
+        cache: false,
+        processData: false,
+        
         success: function (response) {
             // if error has data => show error msg alert
             dom.audioResult.innerHTML = "<p>" + response.result + "</p>"
