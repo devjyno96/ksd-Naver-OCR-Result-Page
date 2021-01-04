@@ -1,14 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# Copyright (c) Microsoft. All rights reserved.
-# Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
-"""
-Speech recognition samples for the Microsoft Cognitive Services Speech SDK
-"""
-
 import time
-
+import json
 try:
     import azure.cognitiveservices.speech as speechsdk
 except ImportError:
@@ -21,39 +12,25 @@ except ImportError:
     import sys
     sys.exit(1)
 
+# with open("private.json") as json_file:
+with open("./src/KSD_STT/private.json") as json_file:
+    json_data = json.load(json_file)
 
-# Set up the subscription info for the Speech Service:
-# Replace with your own subscription key and service region (e.g., "westus").
-speech_key, service_region = "3821b1589d544d8e88be297d871854c5", "koreacentral"
+speech_key, service_region = json_data["speech_key"], json_data["service_region"]
 
-# Specify the path to an audio file containing speech (mono WAV / PCM with a sampling rate of 16
-# kHz).
 
-# weatherfilename = "data/consulting02.wav"음성데이터/공공스포츠클럽_인터뷰_태권도.wav
-weatherfilename = "voice_data/공공스포츠클럽_인터뷰_태권도.wav"
-
-def speech_recognize_async_from_file(audio_file):
+def speech_recognize_async_from_file(weatherfilename):
     """performs one-shot speech recognition asynchronously with input from an audio file"""
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     speech_config.speech_recognition_language = "ko-KR"
     audio_config = speechsdk.audio.AudioConfig(filename=weatherfilename)
-    # Creates a speech recognizer using a file as audio input.
-    # The default language is "en-us".
+
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
 
-    # Perform recognition. `recognize_async` does not block until recognition is complete,
-    # so other tasks can be performed while recognition is running.
-    # However, recognition stops when the first utterance has bee recognized.
-    # For long-running recognition, use continuous recognitions instead.
     result_future = speech_recognizer.recognize_once_async()
 
-    print('recognition is running....')
-    # Other tasks can be performed here...
-
-    # Retrieve the recognition result. This blocks until recognition is complete.
     result = result_future.get()
 
-    # Check the result
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         print("Recognized: {}".format(result.text))
     elif result.reason == speechsdk.ResultReason.NoMatch:
@@ -65,20 +42,17 @@ def speech_recognize_async_from_file(audio_file):
             print("Error details: {}".format(cancellation_details.error_details))
 
 
-def speech_recognize_continuous_from_file(file_name):
+def speech_recognize_continuous_from_file(weatherfilename):
     """performs continuous speech recognition with input from an audio file"""
     # <SpeechContinuousRecognitionWithFile>
-    #resultFile = open("result.txt", "w")
 
     result_str = ""
 
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     speech_config.speech_recognition_language = "ko-KR"
-    # audio_config = speechsdk.audio.AudioConfig(filename=weatherfilename)
-    audio_config = speechsdk.audio.AudioConfig(filename=file_name)
+    audio_config = speechsdk.audio.AudioConfig(filename=weatherfilename)
 
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
-    #speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
     done = False
 
     def stop_cb(evt):
@@ -90,24 +64,130 @@ def speech_recognize_continuous_from_file(file_name):
     def str_cpy(cpy):
         nonlocal result_str
         result_str += cpy
-    # Connect callbacks to the events fired by the speech recognizer
+
     #speech_recognizer.recognizing.connect(lambda evt: print('Recognizing: {}'.format(evt.result.text)))
-    # speech_recognizer.recognized.connect(lambda evt: print('Recognized: {}'.format(evt.result.text)))
     speech_recognizer.recognized.connect(lambda evt: str_cpy(evt.result.text))
     speech_recognizer.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
     speech_recognizer.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
     speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
-    # stop continuous recognition on either session stopped or canceled events
+
     speech_recognizer.session_stopped.connect(stop_cb)
     speech_recognizer.canceled.connect(stop_cb)
 
-    # Start continuous speech recognition
     speech_recognizer.start_continuous_recognition()
     while not done:
         time.sleep(.5)
-    #resultFile.close()
     speech_recognizer.stop_continuous_recognition()
 
     print(result_str)
     return result_str
-    # </SpeechContinuousRecognitionWithFile>
+
+
+def speech_recognize_continuous_from_mic():
+
+    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+    speech_config.speech_recognition_language = "ko-KR"
+
+    speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
+    done = False
+
+    def stop_cb(evt):
+        """callback that signals to stop continuous recognition upon receiving an event `evt`"""
+        print('CLOSING on {}'.format(evt))
+        nonlocal done
+        done = True
+
+    result_str = ""
+
+    def str_cpy(cpy):
+        nonlocal result_str
+        result_str += cpy
+
+    #speech_recognizer.recognizing.connect(lambda evt: print('Recognizing: {}'.format(evt.result.text)))
+    speech_recognizer.recognized.connect(lambda evt: str_cpy(evt.result.text))
+    speech_recognizer.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
+    speech_recognizer.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
+    speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
+
+    speech_recognizer.session_stopped.connect(stop_cb)
+    speech_recognizer.canceled.connect(stop_cb)
+
+    speech_recognizer.start_continuous_recognition()
+    while not done:
+        time.sleep(.5)
+    speech_recognizer.stop_continuous_recognition()
+
+    print(str_cpy)
+    return str_cpy
+
+class BinaryFileReaderCallback(speechsdk.audio.PullAudioInputStreamCallback):
+    def __init__(self, filename: str):
+        super().__init__()
+        self._file_h = open(filename, "rb")
+
+    def read(self, buffer: memoryview) -> int:
+        try:
+            size = buffer.nbytes
+            frames = self._file_h.read(size)
+            buffer[:len(frames)] = frames
+            return len(frames)
+        except Exception as ex:
+            print('Exception in `read`: {}'.format(ex))
+            raise
+
+    def close(self) -> None:
+        print('closing file')
+        try:
+            self._file_h.close()
+        except Exception as ex:
+            print('Exception in `close`: {}'.format(ex))
+            raise
+
+
+def compressed_stream_helper(compressed_format, weatherfilename):
+    callback = BinaryFileReaderCallback(weatherfilename)
+    stream = speechsdk.audio.PullAudioInputStream(stream_format=compressed_format, pull_stream_callback=callback)
+
+    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+    speech_config.speech_recognition_language = "ko-KR"
+
+    audio_config = speechsdk.audio.AudioConfig(stream=stream)
+
+    speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+    done = False
+
+    result_str = ""
+
+    def stop_cb(evt):
+        """callback that signals to stop continuous recognition upon receiving an event `evt`"""
+        print('CLOSING on {}'.format(evt))
+        nonlocal done
+        done = True
+
+    def str_cpy(cpy):
+        nonlocal result_str
+        result_str += cpy
+
+    #speech_recognizer.recognizing.connect(lambda evt: print('RECOGNIZING: {}'.format(evt)))
+    speech_recognizer.recognized.connect(lambda evt: str_cpy(evt.result.text))
+    speech_recognizer.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
+    speech_recognizer.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
+    speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
+
+    speech_recognizer.session_stopped.connect(stop_cb)
+    speech_recognizer.canceled.connect(stop_cb)
+
+    speech_recognizer.start_continuous_recognition()
+    while not done:
+        time.sleep(.5)
+
+    speech_recognizer.stop_continuous_recognition()
+
+    print(result_str)
+    return result_str
+
+
+def pull_audio_input_stream_compressed_mp3(filename):
+    compressed_format = speechsdk.audio.AudioStreamFormat(compressed_stream_format=speechsdk.AudioStreamContainerFormat.MP3)
+    return compressed_stream_helper(compressed_format, filename)

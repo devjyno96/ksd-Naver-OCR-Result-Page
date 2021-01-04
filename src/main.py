@@ -57,20 +57,18 @@ def sttApi():
             return redirect(request.url)
 
     file = request.files['file']
-    # print(request.form['audioFile'])
-    #print(request.data.uploadFile)
+
     if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
 
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
-    # result_str = stt.run("temp.wav")
-    result_str = stt.run(UPLOAD_FOLDER + "/" + file.filename)
+    result_str = stt.run(bool_mic = False, file_name = UPLOAD_FOLDER + "/" + file.filename)
+
     result = {'result' : "test_val"}
 
     result['result'] = result_str
-    # print(result_str) # TEST
     
     return jsonify(result)
 
