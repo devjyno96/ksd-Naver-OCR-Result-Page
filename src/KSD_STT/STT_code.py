@@ -1,5 +1,6 @@
 import time
 import json
+import os
 try:
     import azure.cognitiveservices.speech as speechsdk
 except ImportError:
@@ -12,8 +13,10 @@ except ImportError:
     import sys
     sys.exit(1)
 
+
+
 # with open("private.json") as json_file:
-with open("./src/KSD_STT/private.json") as json_file:
+with open(os.path.dirname(os.path.realpath(__file__)) + "/private.json") as json_file:
     json_data = json.load(json_file)
 
 speech_key, service_region = json_data["speech_key"], json_data["service_region"]
