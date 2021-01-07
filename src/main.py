@@ -4,6 +4,8 @@ import json
 import requests
 import os
 
+from pathlib import Path
+
 from werkzeug.utils import secure_filename
 
 from  KSD_STT import stt_run as stt
@@ -12,7 +14,9 @@ from  KSD_STT import stt_run as stt
 NAVER_OCR_URL = "312ab1aaaad04cb4907e2bdfb246bc67.apigw.ntruss.com/custom/v1/3870/40d9e6658a8a7c8b7d764aa349b635ea318d81480956aa066bccd98e5a61f074"
 NAVER_OCR_SECRET = "VXdEdFJDZ2lrWWdRZ2FmYUpWV25SWWVaT0VuZFNPU2Y="
 
-UPLOAD_FOLDER = './audioFiles'
+
+path = Path(os.path.realpath(__file__))
+UPLOAD_FOLDER = str(path.parent.parent) + '/audioFiles'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
