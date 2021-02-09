@@ -3,6 +3,7 @@ from flask import Flask, Response, abort, request, render_template, jsonify, fla
 import json
 import requests
 import os
+import time
 
 from pathlib import Path
 
@@ -32,7 +33,7 @@ def sttHtml():
 
 @app.route('/api/ocr-requests', methods=['POST'])
 def newOCRRequest():
-
+    print(request.data[:1000])
     result = requests.post('https://{}/infer'.format(NAVER_OCR_URL), headers={
         'X-OCR-SECRET': NAVER_OCR_SECRET
     }, files={
@@ -51,6 +52,33 @@ def newOCRRequest():
     })
             
     return json.dumps(result.json(), ensure_ascii=False)
+
+
+
+@app.route('/api/ocr-requests/s3', methods=['POST'])
+def newOCRRequestS3():
+    data = request.data.decode('utf-8').split('=')[1]
+
+    request_json = {
+        'images': [
+            {
+                'format': data.split('.')[-1],
+                'name': 'image',
+                'url': data
+            }
+        ],
+        'requestId': 'ocr-request',
+        'version': 'V2',
+        'timestamp': int(round(time.time() * 1000))
+    }
+
+    payload = json.dumps(request_json).encode('UTF-8')
+    headers = {
+    'X-OCR-SECRET': NAVER_OCR_SECRET,
+    'Content-Type': 'application/json'
+    }
+
+    return json.dumps(requests.request("POST", 'https://{}/infer'.format(NAVER_OCR_URL), headers=headers, data = payload).json(), ensure_ascii=False)
 
 
 
