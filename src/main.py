@@ -46,11 +46,10 @@ def newOCRRequest():
             'images': [{
                 'format': 'jpg',
                 'name': 'image',
-                'data' : base64.b64encode(request.data).decode("utf-8")
+                'data' : base64.b64encode(data).decode("utf-8")
             }]
         })
     })
-            
     return json.dumps(result.json(), ensure_ascii=False)
 
 
