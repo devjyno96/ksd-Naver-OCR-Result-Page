@@ -1,0 +1,10 @@
+{
+  "Account" : {
+    "Client_ID" : "jovatffu6f",
+    "Client_Secret" : "uHHutTgv8vQRtwBrdKNOq6rxUfNHOdKlrNRg99hY"
+  },
+  "ClovaSpeech" : {
+    "Secret_Key" : "1de7380a73834cea8672c536623d196d",
+    "Invoke_URL" : "https://clovaspeech-gw.ncloud.com/external/v1/180/0e1c6382085f25cf0fcaeb142522172651071fd2ab4d5eccbd6a614cccf08197"
+  }
+}
