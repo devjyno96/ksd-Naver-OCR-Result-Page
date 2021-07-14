@@ -132,8 +132,6 @@ def sttApiClova():
 
     result['result'] = result_str
 
-    print(result)
-
     return jsonify(result)
 
 
