@@ -4,3 +4,5 @@ ocr/
 .vscode/
 
 audioFiles/
+/venv/
+/.idea/
