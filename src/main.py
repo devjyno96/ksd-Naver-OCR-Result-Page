@@ -11,7 +11,6 @@ from werkzeug.utils import secure_filename
 
 from KSD_STT import stt_run as azure_stt
 
-
 from Clova_STT.ClovaSpeechClientObject import ClovaSpeechClient as clova_stt
 
 NAVER_OCR_URL = "312ab1aaaad04cb4907e2bdfb246bc67.apigw.ntruss.com/custom/v1/3870/40d9e6658a8a7c8b7d764aa349b635ea318d81480956aa066bccd98e5a61f074"
@@ -32,6 +31,21 @@ def indexHtml():
 @app.route('/stt', methods=['GET'])
 def sttHtml():
     return render_template('Azure_STT.html')
+
+
+@app.route('/stt/ksd', methods=['GET'])
+def sttKsdHtml():
+    return render_template('ksd-result.html')
+
+
+@app.route('/stt/keyword-analysis', methods=['GET'])
+def KsdkeywordAnalysis():
+    return render_template('keyword-analysis.html')
+
+
+@app.route('/stt/sentiment-analysis', methods=['GET'])
+def KsdSentimentAnalysis():
+    return render_template('sentiment-analysis.html')
 
 
 @app.route('/api/ocr-requests', methods=['POST'])
@@ -116,7 +130,6 @@ def sttApiClova():
         return redirect(request.url)
 
     file = request.files['file']
-
     if file.filename == '':
         flash('No selected file')
         return redirect(request.url)

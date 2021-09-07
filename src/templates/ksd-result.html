@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SDAP</title>
+    <meta charset="utf-8">
+    <style>
+        h2 {
+            background-color: aliceblue;
+            display: block;
+        }
+
+
+
+
+    </style>
+    <script>
+        function keywordA() {
+            window.open('keyword-analysis', '_blank');
+        }
+        function sentimentA() {
+            window.open('sentiment-analysis', '_blank');
+        }
+
+
+
+
+    </script>
+</head>
+
+<body onload="init()">
+<h1>
+    Speech Dialogue Analysis Platform
+</h1>
+<hr>
+<br>
+<h2>Speech Recognition</h2><br><br>
+<form id="upload-file" method="post" enctype="multipart/form-data">
+    <div id="audioInputButton">
+        <input type="file" accept="audio/*" id="audioFile">
+    </div>
+</form>
+<button type="button" id="audioSubmit">Run STT</button>
+
+<br><br>
+<hr>
+<h2>Result Text</h2>
+<form action="">
+    <textarea name="" id="audioResult" cols="100" rows="20"></textarea>
+    <br><br>
+    <button onclick="keywordA();">Keyword Analysis</button> &nbsp;&nbsp;&nbsp;
+    <button onclick="sentimentA();">Sentiment Anlaysis</button>
+</form>
+<br><br><br>
+<hr>
+<footer>Speech Dialogue Analysis Platform - 2021</footer>
+
+<script src="../static/js/jquery-3.4.1.js"></script>
+<script src="../static/js/stt-ksd.js"></script>
+</body>
+
+</html>

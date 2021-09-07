@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chart</title>
+    <meta charset="utf-8">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js'></script>
+</head>
+
+<body>
+    <h2>3.1 - Horizontal Chart</h2>
+    <hr><br>
+
+    <canvas id="myChart"></canvas>
+
+
+    <script>
+
+        // 우선 컨텍스트를 가져옵니다. 
+        var ctx = document.getElementById("myChart").getContext('2d');
+        /*
+        - Chart를 생성하면서, 
+        - ctx를 첫번째 argument로 넘겨주고, 
+        - 두번째 argument로 그림을 그릴때 필요한 요소들을 모두 넘겨줍니다. 
+        */
+
+
+        // var label_values = ["Red", "BLUE", "Yellow", "Green", "Purple", "Orange"];
+        // var data_values = [12, 20, 13, 5, 8, 3];
+
+        var chart = new Chart(ctx, {
+            // type : 'bar' = 막대차트를 의미합니다. 
+            type: 'bar',
+            data: {
+                labels: ['빨간색', '파란색', '초록색'],
+                datasets: [{
+                    axis: 'y', // ***가로형 막대로 바꾸는 옵션*** 
+                    label: '색상',
+                    backgroundColor: ['red', 'blue', 'green'],
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [2, 10, 5,]
+                }]
+            }, options: {
+                indexAxis: 'y', //***가로형 막대로 바꾸는 옵션*** 
+            }
+        });
+
+
+    </script>
+    <br><br><br>
+    <hr>
+    <footer>SDAP - Sentiment Analysis</footer>
+</body>
+
+</html>
