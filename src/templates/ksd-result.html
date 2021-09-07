@@ -13,6 +13,14 @@
 
 
 
+
+
+
+
+
+
+
+
     </style>
     <script>
         function keywordA() {
@@ -25,35 +33,85 @@
 
 
 
+
+
+
+
+
+
+
+
     </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
 </head>
 
 <body onload="init()">
-<h1>
-    Speech Dialogue Analysis Platform
-</h1>
-<hr>
-<br>
-<h2>Speech Recognition</h2><br><br>
-<form id="upload-file" method="post" enctype="multipart/form-data">
-    <div id="audioInputButton">
-        <input type="file" accept="audio/*" id="audioFile">
-    </div>
-</form>
-<button type="button" id="audioSubmit">Run STT</button>
 
-<br><br>
-<hr>
-<h2>Result Text</h2>
-<form action="">
-    <textarea name="" id="audioResult" cols="100" rows="20"></textarea>
-    <br><br>
-    <button onclick="keywordA();">Keyword Analysis</button> &nbsp;&nbsp;&nbsp;
-    <button onclick="sentimentA();">Sentiment Anlaysis</button>
-</form>
-<br><br><br>
-<hr>
-<footer>Speech Dialogue Analysis Platform - 2021</footer>
+<div class="container">
+    <h1>
+        Speech Dialogue Analysis Platform
+    </h1>
+    <hr>
+    <div class="row">
+        <div class="col-6">
+            <h2>Speech Recognition</h2><br><br>
+            <div class="row">
+                <div class="col">
+                    <form id="upload-file" method="post" enctype="multipart/form-data">
+                        <div id="audioInputButton">
+                            <input type="file" accept="audio/*" id="audioFile">
+                        </div>
+                    </form>
+                </div>
+                <div class="col">
+                    <button type="button" id="audioSubmit">Run STT</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <h2>Result Text</h2>
+            <form action="">
+                <textarea name="" id="audioResult" rows="20" style="width:100%"></textarea>
+                <br><br>
+                <button onclick="keywordA();">Keyword Analysis</button> &nbsp;&nbsp;&nbsp;
+                <button onclick="sentimentA();">Sentiment Analysis</button>
+            </form>
+            <br><br><br>
+        </div>
+    </div>
+
+    <br><br><br>
+    <hr>
+    <footer>Speech Dialogue Analysis Platform - 2021</footer>
+</div>
+
+<!--<h1>-->
+<!--    Speech Dialogue Analysis Platform-->
+<!--</h1>-->
+<!--<hr>-->
+<!--<br>-->
+<!--<h2>Speech Recognition</h2><br><br>-->
+<!--<form id="upload-file" method="post" enctype="multipart/form-data">-->
+<!--    <div id="audioInputButton">-->
+<!--        <input type="file" accept="audio/*" id="audioFile">-->
+<!--    </div>-->
+<!--</form>-->
+<!--<button type="button" id="audioSubmit">Run STT</button>-->
+
+<!--<br><br>-->
+<!--<hr>-->
+<!--<h2>Result Text</h2>-->
+<!--<form action="">-->
+<!--    <textarea name="" id="audioResult" cols="100" rows="20"></textarea>-->
+<!--    <br><br>-->
+<!--    <button onclick="keywordA();">Keyword Analysis</button> &nbsp;&nbsp;&nbsp;-->
+<!--    <button onclick="sentimentA();">Sentiment Analysis</button>-->
+<!--</form>-->
 
 <script src="../static/js/jquery-3.4.1.js"></script>
 <script src="../static/js/stt-ksd.js"></script>
